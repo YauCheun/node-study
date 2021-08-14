@@ -1,0 +1,102 @@
+const fs = require('fs')
+function fsRead(path) {
+  return new Promise((resolve, reject) => {
+    fs.readFile(path, { flag: 'r', encoding: 'utf-8' }, (err, data) => {
+      if (err) {
+        reject(err)
+      } else {
+        resolve(data)
+      }
+    })
+  })
+}
+function fsWrite(content) {
+  return new Promise((resolve, reject) => {
+    fs.writeFile('test.txt', content, { flag: 'a', encoding: 'utf-8' }, (err) => {
+      if (err) {
+        reject('err')
+      } else {
+        resolve(err)
+      }
+    })
+  })
+}
+module.exports = { fsRead, fsWrite }hello2const fs = require('fs')
+fs.unlink('test.txt', (res)=>{
+    console.log('chenggong')
+})hello3// 1.数组不能进行二进制的操作
+// 2.js数组不像java、python等语言效率高
+// 3.buffer内存空间开辟出固=固定大小的内存
+let c = console.log
+
+let str = 'helloworld'
+let buf = Buffer.from(str)
+c(buf)
+
+// 输出buf内容
+c(buf.toString())
+
+// 开辟一个空的buffer缓存区
+let buf1 = Buffer.alloc(10)
+buf1[0] = 10
+c(buf1)
+
+// 开辟一个不安全的buffer缓存区
+let buf2 = Buffer.allocUnsafe(10)
+c(buf2)hello worldconst fs = require('fs')
+const { fsRead, fsWrite } = require('./common')
+const c = console.log
+// ============同步==========
+
+// const fd = fs.openSync('hello.txt', 'r')  // 返回文件描述符
+// let buf = Buffer.alloc(16)
+// let content = fs.readSync(fd,buf,0,16) // readSync 返回字节数量
+// c(content)
+
+// const content = fs.readFileSync('hello.txt', { flag: 'r', encoding: 'utf-8' })  // 返回读取内容
+// c(content)
+
+// ============异步==========
+
+async function readList() {
+  let file1 = await fsRead('hello.txt')
+  let file2 = await fsRead(file1 + '.txt')
+  let file3 = await fsRead(file2 + '.txt')
+  c(file3)
+
+}
+// readList()
+
+// 读取目录
+fs.readdir('../文件模块', (err, fileList) => {
+  if (err) {
+    console.log(err)
+  } else {
+    fileList.forEach(async (item) => {
+      let content = await fsRead(item)
+      await fsWrite(content)
+    })
+  }
+})const fs = require('fs')
+
+const c = console.log
+
+// ============异步==========
+
+function fsWrite(content) {
+  return new Promise((resolve, reject) => {
+    fs.writeFile('test.txt',content, { flag: 'a', encoding: 'utf-8' }, (err) => {
+      if (err) {
+        reject('err')
+      } else {
+        resolve(err)
+      }
+    })
+  })
+}
+async function writeList() {
+  await fsWrite('七夕快乐\n')
+  await fsWrite('你好啊\n')
+  await fsWrite('感觉怎么样')
+}
+writeList()
