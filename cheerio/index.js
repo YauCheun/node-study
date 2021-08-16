@@ -5,10 +5,17 @@ const fs = require('fs')
 const c = console.log
 let httpUrl = 'https://www.doutula.com/article/list/?page=1'
 
+// 等待函数
+
+async function wait(time){
+  return new Promise((resolve,reject)=>{
+    setTimeout(()=>resolve(), time)
+  })
+}
 async function spider() {
   // 获取页面总数
-  // let allNum = await getNum()
-  let allNum =1
+  let allNum = await getNum()
+  // let allNum =1
   for (let i = 1; i <= allNum; i++) {
     getListPage(i)
   }
@@ -58,6 +65,7 @@ async function parsePage(url, dirName) {
       ws.end()
     })
   })
+  await wait(1000)
 }
 
 spider()
