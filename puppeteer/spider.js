@@ -53,7 +53,7 @@ let httpUrl = 'https://www.aibooks.cc/';
     let eleA = await page.$('.dltable tr:nth-child(3) a:nth-child(4)')
     let aHref = await eleA.getProperty('href')
     aHref = aHref._remoteObject.value
-    let content = `书名: "${pageObj.title}", 下载地址:"${aHref}"\n`
+    let content = `{"title": "${pageObj.title}", "url":"${aHref}"}\n`
     fs.writeFile('book.txt', content, { flag: 'a' }, () => {
       console.log('已将下载路径写入')
     })
