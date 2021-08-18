@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+
+      class myPromise {
+        constructor(fn) {
+          this.state = "pending";
+          this.successList = [];
+          this.failList = [];
+          fn(this.resolve.bind(this))
+        }
+        then(successFn, failFn) {
+          if (typeof successFn == "function") {
+            this.successList.push(successFn);
+          }
+          if (typeof failFn == "function") {
+            this.failList.push(failFn);
+          }
+        }
+        resolve(res) {
+          console.log(this.successList)
+          this.state = "fullfilled";
+          this.successList.forEach(function (item, index) {
+            //将成功的事件循环调用
+            item(res);
+          });
+        }
+        reject() {
+          this.state = "rejected";
+          //注册到的失败所有事件进行调用
+          this.failList.forEach(function (item, index) {
+            item(res);
+          });
+          throw Error(res);
+        }
+        catch(failFn) {
+          if (typeof failFn == "function") {
+            this.failList.push(failFn);
+          }
+        }
+      }
+      let mypromise = new myPromise((resolve) => {
+        setTimeout(() => {
+          resolve("helloworld");
+        }, 3000);
+      });
+      let promise = new Promise((resolve) => {
+        setTimeout(() => {
+          resolve("helloworld");
+        }, 3000);
+      });
+      // promise.then((res) => {
+      //   console.log(res);
+      // });
+      console.log(mypromise, promise)
+    </script>
+  </body>
+</html>
